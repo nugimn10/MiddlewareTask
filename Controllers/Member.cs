@@ -33,16 +33,31 @@ namespace TaskWebApiIntro.Controllers
         [HttpGet]
         public IActionResult Get()
         {
+            if (members == null)
+            {
+            return NotFound();
+            }
             return Ok(members);         
         }
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
+            if (members == null)
+            {
+            return NotFound();
+            }else {
             return Ok(members.Find( e => e.Id == id));
+            }
+
+
         }
         [HttpPost]
         public IActionResult MemberAdd(Member member)
         {
+            if (members == null)
+            {
+            return NotFound();
+            }
             var addMembers = new Member(){Id=member.Id, Username = member.Username, Password = member.Password, Email=member.Email, FullName = member.FullName, Popularity = member.Popularity};
             members.Add(addMembers);
 
@@ -51,9 +66,15 @@ namespace TaskWebApiIntro.Controllers
         [HttpPatch("{id}")]
         public IActionResult patchMember(int id, [FromBody]JsonPatchDocument<Member> ptcMember)
         {
-
+            if (members == null)
+            {
+            return NotFound();
+            } 
             ptcMember.ApplyTo(members.Find(e => e.Id == id));
             return Ok(members.Find(e => e.Id == id));
+            
+
+            
 
         }
     }
